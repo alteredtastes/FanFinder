@@ -57,7 +57,7 @@ napster.callback = (req, res, next) => {
       /* See note about authorized cookie in client/src/js/Utils/Auth */
       res.cookie('isAuthorized', true, { maxAge: jwtCookieAge });
       res.cookie('jwt', auth.access_token, jwtOptions);
-      res.redirect(`${process.env.DEV_CLIENT}?state=${state}`);
+      res.redirect(`${process.env.DEV_CLIENT}?appState=${state}`);
     });
   }
 }

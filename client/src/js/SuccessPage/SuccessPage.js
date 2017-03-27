@@ -3,6 +3,12 @@ import { Button } from 'react-bootstrap';
 import './SuccessPage.css';
 
 class SuccessPage extends Component {
+  constructor() {
+    super()
+    this.state = {
+      fetchWithCookie: this.fetchWithCookie.bind(this)
+    }
+  }
 
   fetchWithCookie() {
     fetch('/api/logger', { credentials: 'include' })
@@ -19,7 +25,7 @@ class SuccessPage extends Component {
         <p>
           Napster Login Succeeded!
         </p>
-        <Button onClick={this.fetchWithCookie.bind(this)}>
+        <Button onClick={this.state.fetchWithCookie}>
           Test Cookies
         </Button>
       </div>
