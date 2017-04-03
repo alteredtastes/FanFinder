@@ -87,5 +87,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log(`API SERVER LISTENING ON PORT: ${port}, PID: ${process.pid}, ENV: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`API SERVER LISTENING ON PORT: ${port}, PID: ${process.pid}, ENV: ${process.env.NODE_ENV}`);
 }
+
+var env = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = env;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cookie from 'react-cookie';
 import { HomePage } from './';
 
 class HomePageContainer extends Component {
@@ -6,7 +7,6 @@ class HomePageContainer extends Component {
     super(props);
     this.state = {
       oauth: '/api/oauth?state=success',
-      apiMessage: '',
       _f: {
         logger: this.logger.bind(this)
       }
@@ -14,7 +14,14 @@ class HomePageContainer extends Component {
   }
 
   logger(e) {
-    console.log(`You clicked ${e.currentTarget.name}`);
+    const isAuthorized = cookie.load('isAuthorized');
+    if(isAuthorized) {
+      fetch('/api/logger', { credentials: 'include' })
+      .then(resp => resp.json())
+      .then(res => console.log(res));
+    } else {
+      console.log('client logged!');
+    }
   }
 
   render() {

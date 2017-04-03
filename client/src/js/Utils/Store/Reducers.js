@@ -1,2 +1,2 @@
-export { HomePageReducer } from '../../HomePage';
-export { SuccessPageReducer } from '../../SuccessPage';
+export HomePageReducer from '../../HomePage';
+export SuccessPageReducer from '../../SuccessPage';

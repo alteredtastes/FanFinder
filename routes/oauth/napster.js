@@ -41,11 +41,12 @@ napster.callback = (req, res, next) => {
       /*SAVE NAPSTER TOKENS TO DB HERE, THEN ENCODE AND
       SEND A JWT IN COOKIE. JWT PAYLOAD SHOULD HAVE A GUID FROM DB.*/
 
+      console.log(process.env.NODE_ENV);
       const jwtCookieAge = 8000;
       const jwtOptions = {
         signed: true, // must also specify secret as array or string in app.js cookieParser()
         httpOnly: true, // hides token from being read by most browser javasript
-        maxAge: jwtCookieAge // in milliseconds, must be longer than jwt expiration
+        maxAge: jwtCookieAge // in milliseconds; if used, must be longer than jwt expiration
         // secure: true, // makes cookie only passable over https
         // expires: new Date(), // instead of maxAge
         // path: , // defaults to '/' , can verify user's calling state

@@ -6,9 +6,19 @@ router.get('/oauth', napster.entry);
 router.get('/oauth/callback', napster.callback);
 
 router.get('/logger', (req, res, next) => {
-  const cookies = req.signedCookies;
-  console.log(cookies.jwt);
-  res.json(req.signedCookies);
+  const jwt = req.signedCookies.jwt;
+  console.log(jwt);
+  res.json({
+    message: jwt ? 'to redux!' : 'cookie expired!'
+  });
+});
+
+router.get('/data', (req, res, next) => {
+  const jwt = req.signedCookies.jwt;
+  console.log(jwt);
+  res.json({
+    testData: jwt ? 'this is some DATA!' : 'cookie expired!'
+  });
 });
 
 module.exports = router;
