@@ -1,32 +1,36 @@
 import React, { Component } from 'react';
-import cookie from 'react-cookie';
+import { store } from '../Utils/Store';
 import { HomePage } from './';
 
 class HomePageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      oauth: '/api/oauth?state=success',
       _f: {
-        logger: this.logger.bind(this)
+        fetchWithCookie: this.fetchWithCookie.bind(this),
+        fetchData: this.fetchData.bind(this)
       }
     }
   }
 
-  logger(e) {
-    const isAuthorized = cookie.load('isAuthorized');
-    if(isAuthorized) {
-      fetch('/api/logger', { credentials: 'include' })
-      .then(resp => resp.json())
-      .then(res => console.log(res));
-    } else {
-      console.log('client logged!');
-    }
+  fetchWithCookie() {
+    fetch('/api/logger', { credentials: 'include' })
+    .then(resp => resp.json())
+    .then(res => console.log(res));
+  }
+
+  fetchData() {
+    fetch('/api/data', { credentials: 'include' })
+    .then(resp => resp.json())
+    .then(res => {
+      store.dispatch({ type: 'Home_Action_1', payload: res.testData });
+      store.getState()
+    });
   }
 
   render() {
     return(
-      <HomePage {...this.state} />
+      <HomePage {...this.state}/>
     );
   }
 }

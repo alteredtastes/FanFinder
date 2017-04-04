@@ -9,8 +9,8 @@ import './index.css';
 
 import { Auth } from './js/Utils/Auth';
 import { Layout } from './js/Common/Layout';
+import { LoginPageContainer } from './js/LoginPage';
 import { HomePageContainer } from './js/HomePage';
-import { SuccessPageContainer } from './js/SuccessPage';
 
 import { store } from './js/Utils/Store';
 const history = syncHistoryWithStore(browserHistory, store);
@@ -20,8 +20,8 @@ ReactDOM.render(
     <Router history={history}>
       <Route component={Auth}>
         <Route path="/" component={Layout}>
-          <IndexRoute component={HomePageContainer} />
-          <Route path="success" name="success" component={SuccessPageContainer} />
+          <IndexRoute component={LoginPageContainer} />
+          <Route path="home" name="home" component={HomePageContainer} />
         </Route>
       </Route>
     </Router>

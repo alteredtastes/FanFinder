@@ -1,24 +1,36 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { IndexLink } from 'react-router';
 import { Button } from 'react-bootstrap';
 import './HomePage.css';
 
-const HomePage = ({ oauth, _f }) => (
-  <div className='Home'>
-    <p>
-      Login Page
+const HomePage = (p) => (
+  <div>
+    <p className='Home'>
+      Home Page
     </p>
-    <Button href={oauth}>
-      Login With Napster
-    </Button>
-    <Button name='loggerButton' onClick={_f.logger}>
-      Logger
-    </Button>
-    <Button>
-      <Link to="success">
-        to success page
-      </Link>
-    </Button>
+    <p>
+      Napster Login Succeeded!
+    </p>
+    <p>
+      <Button onClick={p._f.fetchWithCookie}>
+        Test Cookies
+      </Button>
+    </p>
+    <p>
+      <Button onClick={p._f.fetchData}>
+        Get Data
+      </Button>
+    </p>
+    <p>
+      <Button>
+        <IndexLink to="/">
+          to login page
+        </IndexLink>
+      </Button>
+    </p>
+    <p>
+      { p.testData }
+    </p>
   </div>
 );
 
