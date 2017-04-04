@@ -3,7 +3,6 @@ import { store } from '../Utils/Store';
 import { HomePage } from './';
 import cookie from 'react-cookie';
 
-let input;
 class HomePageContainer extends Component {
   constructor() {
     super();
