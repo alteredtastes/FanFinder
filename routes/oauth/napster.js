@@ -1,3 +1,6 @@
+const { createJwt } = require('../utils/jwt.utility');
+const User = require('../../database/models');
+
 const napster = {};
 
 const createRequest = (authCode) => {
@@ -14,7 +17,7 @@ const createRequest = (authCode) => {
 }
 
 napster.entry = (req, res, next) => {
-  const state = req.query.state; // frontend path to transitionTo if auth success
+  const state = req.query.state; // frontend path to transition to if auth success
   const uri = [
     'https://api.napster.com/oauth/authorize?',
     `client_id=${process.env.NAPSTER_KEY}&`,
@@ -38,27 +41,36 @@ napster.callback = (req, res, next) => {
     .then((resp) => resp.json())
     .then((auth) => {
 
-      /*SAVE NAPSTER TOKENS TO DB HERE, THEN ENCODE AND
-      SEND A JWT IN COOKIE. JWT PAYLOAD SHOULD HAVE A GUID FROM DB.*/
+      const napsterUser = User.create({
+        napsterToken: auth.access_token
+      });
 
-      console.log(process.env.NODE_ENV);
-      const jwtCookieAge = 8000;
-      const jwtOptions = {
-        signed: true, // must also specify secret as array or string in app.js cookieParser()
-        httpOnly: true, // hides token from being read by most browser javasript
-        maxAge: jwtCookieAge // in milliseconds; if used, must be longer than jwt expiration
-        // secure: true, // makes cookie only passable over https
-        // expires: new Date(), // instead of maxAge
-        // path: , // defaults to '/' , can verify user's calling state
-        // domain: , // defaults to domain name of the app
-        // sameSite: , // see express docs
-        // encode: ,// see express docs
-      };
+      napsterUser.save()
+      .then(createJwt)
+      .then(token => {
+        const jwt = token;
+        const jwtCookieAge = 8000;
+        const jwtOptions = {
+          signed: true, // must also specify secret as array or string in app.js cookieParser()
+          // httpOnly: true, // hides token from being read by most browser javasript
+          maxAge: jwtCookieAge // in milliseconds; if used, must be longer than jwt expiration
+          // secure: true, // makes cookie only passable over https
+          // expires: new Date(), // instead of maxAge
+          // path: , // defaults to '/' , can verify user's calling state
+          // domain: , // defaults to domain name of the app
+          // sameSite: , // see express docs
+          // encode: ,// see express docs
+        };
 
-      /* See note about authorized cookie in client/src/js/Utils/Auth */
-      res.cookie('isAuthorized', true, { maxAge: jwtCookieAge });
-      res.cookie('jwt', auth.access_token, jwtOptions);
-      res.redirect(`${process.env.DEV_CLIENT}?appState=${state}`);
+        /*
+        See note about authorized cookie in client/src/js/Utils/Auth
+        If expiring the jwt cookie, send additional cookie with same expiration.
+        res.cookie('isAuthorized', true, { maxAge: jwtCookieAge });
+        */
+
+        res.cookie('jwt', jwt, jwtOptions);
+        res.redirect(`${process.env.DEV_CLIENT}?appState=${state}`);
+      });
     });
   }
 }

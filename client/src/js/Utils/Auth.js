@@ -6,13 +6,12 @@ class Auth extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isAuthorized: cookie.load('isAuthorized'),
       appState: this.props.location.query.appState
     }
   }
 
   componentWillMount() {
-    if(this.state.isAuthorized) {
+    if(cookie.load('jwt')) {
       browserHistory.push(this.state.appState);
     } else {
       console.log('login failed!');

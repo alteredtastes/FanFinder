@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { napster } = require('./oauth');
+const auth = require('./oauth');
+const napster = require('./napster');
 
-router.get('/oauth', napster.entry);
-router.get('/oauth/callback', napster.callback);
+router.get('/oauth', auth.napster.entry);
+router.get('/oauth/callback', auth.napster.callback);
+
+router.get('/napster/search', napster.search);
 
 module.exports = router;

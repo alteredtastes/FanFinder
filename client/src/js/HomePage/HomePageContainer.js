@@ -1,31 +1,25 @@
 import React, { Component } from 'react';
 import { store } from '../Utils/Store';
 import { HomePage } from './';
+import cookie from 'react-cookie';
 
+let input;
 class HomePageContainer extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      _f: {
-        fetchWithCookie: this.fetchWithCookie.bind(this),
-        fetchData: this.fetchData.bind(this)
-      }
+      submitSearch: this.submitSearch.bind(this)
     }
   }
 
-  fetchWithCookie() {
-    fetch('/api/logger', { credentials: 'include' })
+  submitSearch(e) {
+    const query = e.target.value;
+    if (!query.trim()) {
+      return;
+    }
+    fetch(`/api/napster/search?type=artist&q=${query}`, { credentials: 'include' })
     .then(resp => resp.json())
     .then(res => console.log(res));
-  }
-
-  fetchData() {
-    fetch('/api/data', { credentials: 'include' })
-    .then(resp => resp.json())
-    .then(res => {
-      store.dispatch({ type: 'Home_Action_1', payload: res.testData });
-      store.getState()
-    });
   }
 
   render() {
