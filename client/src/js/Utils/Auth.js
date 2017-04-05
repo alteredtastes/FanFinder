@@ -11,7 +11,7 @@ class Auth extends Component {
   }
 
   componentWillMount() {
-    if(cookie.load('jwt')) {
+    if(cookie.load('token')) {
       browserHistory.push(this.state.appState);
     } else {
       console.log('login failed!');

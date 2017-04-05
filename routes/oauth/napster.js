@@ -1,4 +1,4 @@
-const { createJwt } = require('../utils/jwt.utility');
+const { createToken } = require('../utils/jwt.utility');
 const User = require('../../database/models');
 
 const napster = {};
@@ -31,8 +31,10 @@ napster.entry = (req, res, next) => {
 napster.callback = (req, res, next) => {
   const napsterErrored = req.query.error;
   if (napsterErrored) {
-    res.redirect(`${process.env.DEV_CLIENT}?authorized=false`);
+    res.status(404).send({ message: 'Napster unavailable. Retry?' });
+    return;
   }
+
   const napsterSuccess = req.query.code;
   if (napsterSuccess) {
     const state = req.query.state;
@@ -46,10 +48,10 @@ napster.callback = (req, res, next) => {
       });
 
       napsterUser.save()
-      .then(createJwt)
+      .then(createToken)
       .then(token => {
-        const jwt = token;
-        const jwtCookieAge = 8000;
+        console.log('POST SIGN = ', token);
+        const jwtCookieAge = 16000;
         const jwtOptions = {
           signed: true, // must also specify secret as array or string in app.js cookieParser()
           // httpOnly: true, // hides token from being read by most browser javasript
@@ -68,7 +70,7 @@ napster.callback = (req, res, next) => {
         res.cookie('isAuthorized', true, { maxAge: jwtCookieAge });
         */
 
-        res.cookie('jwt', jwt, jwtOptions);
+        res.cookie('token', token, jwtOptions);
         res.redirect(`${process.env.DEV_CLIENT}?appState=${state}`);
       });
     });

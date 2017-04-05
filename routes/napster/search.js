@@ -1,5 +1,7 @@
 const search = (req, res, next) => {
-  console.log('here is q: ', req.query.q);
+  res.json({
+    message: `You searched for ${req.query.q}!`
+  })
 };
 
 module.exports = { search };
