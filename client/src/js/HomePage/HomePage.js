@@ -1,6 +1,5 @@
 import React from 'react';
-import { IndexLink } from 'react-router';
-import { Button } from 'react-bootstrap';
+// import { Button } from 'react-bootstrap';
 import './HomePage.css';
 
 const HomePage = ({ submitSearch }) => (

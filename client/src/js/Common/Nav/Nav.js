@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { IndexLink } from 'react-router';
-import { Navbar, Image } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 import './Nav.css';
 
 class Nav extends Component {

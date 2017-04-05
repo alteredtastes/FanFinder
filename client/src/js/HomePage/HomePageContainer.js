@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { store } from '../Utils/Store';
+// import { store } from '../Utils/Store';
 import { HomePage } from './';
-import cookie from 'react-cookie';
 
 class HomePageContainer extends Component {
   constructor() {
