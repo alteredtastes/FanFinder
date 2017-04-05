@@ -1,5 +1,5 @@
-const { createToken } = require('../utils/jwt.utility');
-const User = require('../../database/models');
+const { createToken } = require('../utils/jwt.utils');
+const { User } = require('../../database/models');
 
 const napster = {};
 
@@ -50,7 +50,6 @@ napster.callback = (req, res, next) => {
       napsterUser.save()
       .then(createToken)
       .then(token => {
-        console.log('POST SIGN = ', token);
         const jwtCookieAge = 10000; // must expire AFTER jwt does
         const jwtOptions = {
           signed: true, // must also specify secret as array or string in app.js cookieParser()
