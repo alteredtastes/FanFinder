@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
+const { User } = require('../../database/models');
 
 const createToken = ({ _id }) => {
   return jwt.sign({ guid: _id }, process.env.JWT_SECRET, {
-    expiresIn: '5s' // cookie must also be set to expire AFTER the jwt.
+    expiresIn: '60s' // cookie must also be set to expire AFTER the jwt.
   });
 };
 
@@ -15,12 +16,16 @@ const verifyToken = (req, res, next) => {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedJwt) => {
     if (err) {
-      console.log(`JWT VERIFY ERROR: ${err}`);
+      // console.log(err);
       res.status(403).send({ message: 'Token has expired' });
       return;
     }
-    req.guid = decodedJwt.guid;
-    next();
+
+    User.findOne({ _id: decodedJwt.guid })
+    .then((user) => {
+      req.user = user;
+      next();
+    });
   });
 }
 

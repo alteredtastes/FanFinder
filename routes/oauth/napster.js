@@ -50,7 +50,7 @@ napster.callback = (req, res, next) => {
       napsterUser.save()
       .then(createToken)
       .then(token => {
-        const jwtCookieAge = 10000; // must expire AFTER jwt does
+        const jwtCookieAge = 60 * 1000; // must expire AFTER jwt does
         const jwtOptions = {
           signed: true, // must also specify secret as array or string in app.js cookieParser()
           // httpOnly: true, // hides token from being read by most browser javasript

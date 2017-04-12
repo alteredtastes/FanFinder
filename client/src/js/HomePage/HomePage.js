@@ -2,7 +2,7 @@ import React from 'react';
 // import { Button } from 'react-bootstrap';
 import './HomePage.css';
 
-const HomePage = ({ submitSearch }) => (
+const HomePage = ({ submitSearch, elements }) => (
   <div>
     <p className='Home'>
       Home Page
@@ -10,6 +10,9 @@ const HomePage = ({ submitSearch }) => (
     <p>
       <input onChange={submitSearch} type="text"/>
     </p>
+    <div>
+      {elements}
+    </div>
   </div>
 );
 

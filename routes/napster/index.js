@@ -1,3 +1,4 @@
 module.exports = {
-  search: require('./search')
+  search: require('./search'),
+  images: require('./images')
 }

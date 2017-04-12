@@ -5,6 +5,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const connect = require('camo').connect;
+const RateLimit = require('express-rate-limit');
+
 
 let database;
 const uri = 'mongodb://localhost/data/napranks';
@@ -33,9 +35,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 /* TRY THIS NPM PACKAGE FOR COOKIES USING {secure:true}:
 https://www.npmjs.com/package/express-force-ssl */
 app.use(cookieParser(process.env.COOKIE_SECRET));
-
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* config option for express-rate-limit*/
+app.enable('trust proxy');
+app.use('/api', new RateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  // delayAfter: 1, // start the limiting after 1st request
+  max: 0, // limit IP to max # per windowMs # ( ie. 1 req/sec );
+  delayMS: 200,
+  delayAfter: 1
+}));
 app.use('/api', api);
 
 /* ROUTE TOKEN TO REACT ROUTER SUCCESS PAGE */
