@@ -60,10 +60,10 @@ class HomePageContainer extends Component {
     .then(resp => resp.json())
     .then(grabNames)
     .then(getImages)
-    // .then(formElements)
-    // .then(elements => {
-    //   this.setState({ elements });
-    // });
+    .then(formElements)
+    .then(elements => {
+      this.setState({ elements });
+    });
   }
 
   render() {
