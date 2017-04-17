@@ -1,4 +1,4 @@
-const request = require('../req_util.js');
+const request = require('../req_util');
 
 const search = (req, res, next) => {
   const params = {};

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { HomePage } from './';
 
 const grabNames = ({ data }) => {
-  console.log(data[0]);
+  console.log(data[0])
   const names = data.map(item => {
     return item.name
   });
@@ -12,7 +12,6 @@ const grabNames = ({ data }) => {
 }
 
 const getImages = ({ data, names }) => {
-  console.log(names);
   const ids = data.map(item => {
     return item.id
   });
@@ -21,26 +20,23 @@ const getImages = ({ data, names }) => {
     return fetch(`/api/napster/images?artistId=${id}`, { credentials: 'include' })
       .then(resp => resp.json())
       .then(res => {
-        console.log(res.imageUrl)
-        return res.imageUrl;
-      })
+        return res.imageUrl
+      });
   });
 
-  Promise.all(fetches)
-  .then(urls => {
-    console.log('THIS IS ALL THE FETCHES ', urls)
-    return urls;
-  });
+  const promises = Promise.all(fetches);
+  return { promises, names };
 }
 
-const formElements = ({ data, names }) => {
-  return names.map(name => {
-    return (
-      <p>
-        {name}
-      </p>
-    );
-  });
+const formElements = ({ promises, names }) => {
+  promises.then(urls => console.log(urls));
+  // return names.map(name => {
+  //   return (
+  //     <p>
+  //       {name}
+  //     </p>
+  //   );
+  // });
 }
 
 class HomePageContainer extends Component {

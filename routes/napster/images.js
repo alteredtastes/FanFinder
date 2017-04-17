@@ -1,8 +1,11 @@
-const images = (req, res, next) => {
-  // res.json({ imageUrl: 'got here'});
-  // const request = createRequest(req, req.user.napsterToken);
+const request = require('../req_util');
 
-  fetch(request)
+const images = (req, res, next) => {
+  const params = { id: req.query.artistId };
+  const queries = {};
+  const token = req.user.napsterToken;
+
+  fetch(request('artistImages', params, queries, token, 'GET'))
   .then(resp => resp.json())
   .then(({ images }) => {
     res.json({

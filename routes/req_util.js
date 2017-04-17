@@ -4,11 +4,13 @@ const request = (name, params, queries, token, method) => {
   const qs = Object.keys(queries).map((key) => {
     return `${key}=${queries[key]}`
   }).join('&');
+
   const uri = {
     search: `http://api.napster.com/v2.1/search`,
     images: `https://api.napster.com/v2.1/images`,
-    artistImages: `https://api.napster.com/v2.1/artists/params[0]/images`
+    artistImages: `https://api.napster.com/v2.1/artists/${params.id || 'a'}/images`
   }
+  console.log(uri['artistImages']);
   return new Request(`${uri[name]}?${qs}`, options);
 }
 
