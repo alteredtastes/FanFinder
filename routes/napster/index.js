@@ -1,4 +1,3 @@
 module.exports = {
-  search: require('./search'),
-  images: require('./images')
+  searchArtists: require('./searchArtists')
 }

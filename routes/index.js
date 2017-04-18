@@ -7,7 +7,6 @@ const { verifyToken } = require('./utils/jwt.utils.js');
 router.get('/oauth', oauth.napster.entry);
 router.get('/oauth/callback', oauth.napster.callback);
 
-router.get('/napster/search', verifyToken, napster.search);
-router.get('/napster/images', verifyToken, napster.images);
+router.get('/napster/search_artists', verifyToken, napster.searchArtists);
 
 module.exports = router;

@@ -1,0 +1,37 @@
+const request = require('../req_util');
+
+const searchArtists = (req, res, next) => {
+  const params = {};
+  const queries = { q: req.query.q, type: 'artist', limit: '3' };
+  const token = req.user.napsterToken;
+
+  const getArtistImages = preformatted => {
+    preformatted.promises = Promise.all(preformatted.data.map((item) => {
+      const params = { id: item.id };
+      const queries = { limit: 3 };
+
+      return fetch(request('artistImages', params, queries, token, 'GET'))
+      .then(resp => resp.json())
+      .then(res => res)
+    }));
+    return preformatted;
+  }
+
+  const formatArtists = ({ data, promises }) => {
+    return promises.then((imgs) => {
+      return data.map((entry, i) => {
+        let fetchedImages = imgs[i].images;
+        let images = fetchedImages.map((img) => img.url)
+        return { name: entry.name, images };
+      });
+    });
+  }
+
+  fetch(request('search', params, queries, token, 'GET'))
+  .then(resp => resp.json())
+  .then(getArtistImages)
+  .then(formatArtists)
+  .then(artists => res.json({ artists }));
+};
+
+module.exports = searchArtists;
