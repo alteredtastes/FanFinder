@@ -1,18 +1,21 @@
 import React from 'react';
-// import { Button } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import './HomePage.css';
 
-const HomePage = ({ submitSearch, elements }) => (
+const HomePage = ({ submitSearch, searchAlbums, elements }) => (
   <div>
-    <p className='Home'>
-      Home Page
-    </p>
-    <p>
-      <input onChange={submitSearch} type="text"/>
-    </p>
-    <div>
-      {elements}
-    </div>
+    <Grid>
+      <Row>
+        <Col xs={2} sm={2} md={2}>
+          <p>
+            <input onChange={submitSearch} placeholder="Search an artist..." type="text" />
+          </p>
+          <Row>
+            {elements}
+          </Row>
+        </Col>
+      </Row>
+    </Grid>
   </div>
 );
 

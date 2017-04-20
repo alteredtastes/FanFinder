@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
 // import { store } from '../Utils/Store';
+import { Image } from 'react-bootstrap';
 import { HomePage } from './';
-
-const formElements = ({ artists }) => {
-  return artists.map(artist => {
-    return (
-      <div>
-        <p>
-          {artist.name}
-        </p>
-        <img src={artist.images[0]} />
-      </div>
-    );
-  });
-}
 
 class HomePageContainer extends Component {
   constructor() {
     super();
     this.state = {
-      submitSearch: this.submitSearch.bind(this)
+      submitSearch: this.submitSearch.bind(this),
+      searchAlbums: this.searchAlbums.bind(this)
     }
+  }
+
+  searchAlbums = (e) => {
+    console.log(this.props)
+    console.log(e.currentTarget)
+  }
+
+  formArtistElements = ({ artists }) => {
+    return artists.map(artist => {
+      return (
+        <div key={artist.id}>
+          <div className="artistImage" name={artist.id} onClick={this.searchAlbums}>
+            <Image src={artist.images[0]} />
+            <h5 className="artistName">{artist.name.toUpperCase()}</h5>
+          </div>
+        </div>
+      );
+    });
   }
 
   submitSearch(e) {
@@ -30,7 +37,7 @@ class HomePageContainer extends Component {
     }
     fetch(`/api/napster/search_artists?q=${query}`, { credentials: 'include' })
     .then(resp => resp.json())
-    .then(formElements)
+    .then(this.formArtistElements)
     .then(elements => {
       this.setState({ elements });
     });

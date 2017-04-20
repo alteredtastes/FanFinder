@@ -1,4 +1,4 @@
-const { createToken } = require('../utils/jwt.utils');
+const { createToken, setCookieOptions } = require('../utils/auth_utils');
 const { User } = require('../../database/models');
 
 const napster = {};
@@ -49,27 +49,9 @@ napster.callback = (req, res, next) => {
 
       napsterUser.save()
       .then(createToken)
-      .then(token => {
-        const jwtCookieAge = 60 * 1000; // must expire AFTER jwt does
-        const jwtOptions = {
-          signed: true, // must also specify secret as array or string in app.js cookieParser()
-          // httpOnly: true, // hides token from being read by most browser javasript
-          maxAge: jwtCookieAge // in milliseconds; if used, must be longer than jwt expiration
-          // secure: true, // makes cookie only passable over https
-          // expires: new Date(), // instead of maxAge
-          // path: , // defaults to '/' , can verify user's calling state
-          // domain: , // defaults to domain name of the app
-          // sameSite: , // see express docs
-          // encode: ,// see express docs
-        };
-
-        /*
-        See note about authorized cookie in client/src/js/Utils/Auth
-        If expiring the jwt cookie, send additional cookie with same expiration.
-        res.cookie('isAuthorized', true, { maxAge: jwtCookieAge });
-        */
-
-        res.cookie('token', token, jwtOptions);
+      .then(setCookieOptions)
+      .then(({ token, options }) => {
+        res.cookie('token', token, options);
         res.redirect(`${process.env.DEV_CLIENT}?appState=${state}`);
       });
     });
