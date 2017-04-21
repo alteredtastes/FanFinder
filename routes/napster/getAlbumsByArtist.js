@@ -10,9 +10,11 @@ const getAlbumsByArtist = (req, res, next) => {
       const params = { id: item.id };
       const queries = { limit: '3' };
 
-      return fetch(request('albumImages', params, queries, token, 'GET'))
-      .then(resp => resp.json())
-      .then(res => res)
+      // if(item.artistName === req.query.artistName) {
+        return fetch(request('albumImages', params, queries, token, 'GET'))
+        .then(resp => resp.json())
+        .then(res => res)
+      // }
     }));
     return preformatted;
   }
