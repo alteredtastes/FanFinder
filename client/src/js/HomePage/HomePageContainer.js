@@ -12,12 +12,17 @@ class HomePageContainer extends Component {
     }
   }
 
-  getAlbumsByArtist = (e) => {
-    const query = e.currentTarget.getAttribute('name');
-    fetch(`/api/napster/get_albums_by_artist?artistId=${query}`, { credentials: 'include' })
+
+  submitSearch(e) {
+    const query = e.target.value;
+    if (!query.trim()) {
+      return;
+    }
+    fetch(`/api/napster/search_artists?q=${query}`, { credentials: 'include' })
     .then(resp => resp.json())
-    .then(res => {
-      console.log('made it back to HomePageContainer')
+    .then(this.formArtistElements)
+    .then(artistElements => {
+      this.setState({ artistElements });
     });
   }
 
@@ -34,16 +39,26 @@ class HomePageContainer extends Component {
     });
   }
 
-  submitSearch(e) {
-    const query = e.target.value;
-    if (!query.trim()) {
-      return;
-    }
-    fetch(`/api/napster/search_artists?q=${query}`, { credentials: 'include' })
+  getAlbumsByArtist = (e) => {
+    const query = e.currentTarget.getAttribute('name');
+    fetch(`/api/napster/get_albums_by_artist?artistId=${query}`, { credentials: 'include' })
     .then(resp => resp.json())
-    .then(this.formArtistElements)
-    .then(elements => {
-      this.setState({ elements });
+    .then(this.formAlbumElements)
+    .then(albumElements => {
+      this.setState({ albumElements });
+    });
+  }
+
+  formAlbumElements = ({ albums }) => {
+    return albums.map(album => {
+      return (
+        <div key={album.id} name={album.id} /*onClick={this.getListenersByAlbum}*/>
+          <div className="albumImage">
+            <Image src={album.images[0]} />
+            <h5 className="albumName">{album.name.toUpperCase()}</h5>
+          </div>
+        </div>
+      );
     });
   }
 
