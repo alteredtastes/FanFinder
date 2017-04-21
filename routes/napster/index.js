@@ -1,3 +1,4 @@
 module.exports = {
-  searchArtists: require('./searchArtists')
+  searchArtists: require('./searchArtists'),
+  getAlbumsByArtist: require('./getAlbumsByArtist')
 }

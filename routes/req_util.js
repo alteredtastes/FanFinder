@@ -6,8 +6,10 @@ const request = (name, params, queries, token, method) => {
   }).join('&');
 
   const uri = {
+    albumImages: `https://api.napster.com/v2.1/albums/${params.id}/images`,
+    artistImages: `https://api.napster.com/v2.1/artists/${params.id}/images`,
     search: `https://api.napster.com/v2.1/search`,
-    artistImages: `https://api.napster.com/v2.1/artists/${params.id}/images`
+    getAlbumsByArtist: `https://api.napster.com/v2.1/artists/${params.id}/albums`
   }
 
   return new Request(`${uri[name]}?${qs}`, options);

@@ -8,20 +8,24 @@ class HomePageContainer extends Component {
     super();
     this.state = {
       submitSearch: this.submitSearch.bind(this),
-      searchAlbums: this.searchAlbums.bind(this)
+      getAlbumsByArtist: this.getAlbumsByArtist.bind(this)
     }
   }
 
-  searchAlbums = (e) => {
-    console.log(this.props)
-    console.log(e.currentTarget)
+  getAlbumsByArtist = (e) => {
+    const query = e.currentTarget.getAttribute('name');
+    fetch(`/api/napster/get_albums_by_artist?artistId=${query}`, { credentials: 'include' })
+    .then(resp => resp.json())
+    .then(res => {
+      console.log('made it back to HomePageContainer')
+    });
   }
 
   formArtistElements = ({ artists }) => {
     return artists.map(artist => {
       return (
-        <div key={artist.id}>
-          <div className="artistImage" name={artist.id} onClick={this.searchAlbums}>
+        <div key={artist.id} name={artist.id} onClick={this.getAlbumsByArtist}>
+          <div className="artistImage">
             <Image src={artist.images[0]} />
             <h5 className="artistName">{artist.name.toUpperCase()}</h5>
           </div>
