@@ -276,11 +276,11 @@ function runDevServer(host, port, protocol) {
       clearConsole();
     }
     console.log(chalk.cyan('Starting the development server...'));
-    console.log();
 
     if (isInteractive) {
       openBrowser(protocol + '://' + host + ':' + port + '/');
     }
+
   });
 }
 

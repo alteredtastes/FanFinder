@@ -2,3 +2,19 @@
   font-weight: bold;
   text-decoration: underline;
 }
+
+.artistImage {
+  position: relative;
+  width: 100%;
+}
+
+.artistName {
+  margin-top: -20px;
+  width: 100%;
+  color: white;
+  font-family: Helvetica;
+}
+
+img {
+  width: 100%;
+}

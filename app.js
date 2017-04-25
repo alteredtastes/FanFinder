@@ -4,6 +4,14 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const connect = require('camo').connect;
+
+let database;
+const uri = 'mongodb://localhost/data/napranks';
+connect(uri).then(function(db){
+  database = db;
+  console.log('DATABASE HAS CONNECTED');
+});
 
 require('dotenv').config();
 require('es6-promise').polyfill();
@@ -25,7 +33,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 /* TRY THIS NPM PACKAGE FOR COOKIES USING {secure:true}:
 https://www.npmjs.com/package/express-force-ssl */
 app.use(cookieParser(process.env.COOKIE_SECRET));
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', api);
