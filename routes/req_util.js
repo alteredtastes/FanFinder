@@ -8,8 +8,8 @@ const request = (name, params, queries, token, method) => {
   const uri = {
     albumImages: `https://api.napster.com/v2.1/albums/${params.id}/images`,
     artistImages: `https://api.napster.com/v2.1/artists/${params.id}/images`,
-    search: `https://api.napster.com/v2.1/search`,
-    getAlbumsByArtist: `https://api.napster.com/v2.1/artists/${params.id}/albums/top`
+    search: `https://api.napster.com/v2.1/search`
+    // getAlbumsByArtist: `https://api.napster.com/v2.1/artists/${params.id}/albums/top`
   }
 
   return new Request(`${uri[name]}?${qs}`, options);

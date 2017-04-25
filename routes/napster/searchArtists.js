@@ -6,6 +6,8 @@ const searchArtists = (req, res, next) => {
   const token = req.user.napsterToken;
 
   const getArtistImages = preformatted => {
+    console.log(preformatted.data[0].albumGroups)
+    console.log(preformatted.data[0].links)
     preformatted.promises = Promise.all(preformatted.data.map((item) => {
       const params = { id: item.id };
       const queries = { limit: '3' };
@@ -23,11 +25,17 @@ const searchArtists = (req, res, next) => {
         let fetchedImages = imgs[i].images;
         let images = fetchedImages.map(img => img.url);
         images = images.length < 1 ? ['/images/napster_logo.png'] : images;
-        return {
-          id: entry.id,
+        const artist = {};
+        artist[entry.id] = {
+          images,
           name: entry.name,
-          images
+          releases: {
+            albums: entry.main,
+            compilations: entry.compilations,
+            singlesAndEPs: entry.singlesAndEPs
+          }
         };
+        return artist;
       });
     });
   }
