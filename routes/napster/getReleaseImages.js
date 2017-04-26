@@ -8,9 +8,9 @@ const getReleaseImages = (req, res, next) => {
     .concat(releases.compilations)
     .concat(releases.singlesAndEPs);
 
-  const fetchImages = (ids) => {
-    return ids.map(id => {
-      const params = { id };
+  const fetchImages = (releaseIds) => {
+    return releaseIds.map(releaseId => {
+      const params = { releaseId };
       const queries = {};
 
       return fetch(request('albumImages', params, queries, token, 'GET'))
@@ -20,25 +20,25 @@ const getReleaseImages = (req, res, next) => {
   }
 
   const formatReleases = (imageResponses) => {
-    const choseImages = imageResponses.map({ imagesByRelease } => {
-      releaseIds.map(releaseId => {
-        if (releaseId === imagesByRelease.contentId) {
-          return
-        }
-      })
-      if (imagesByRelease.contentId === )
-    })
-  }
-
-  for (let key in releases) {
-    formattedReleases[key] = {};
-    releases[key].forEach((id) => {
-      formattedReleases[key][id] = '';
+    imageResponses.forEach(({ releaseImages }) => {
+      let img = releaseImages[0];
+      let hasKey = img.hasOwnProperty('contentId');
+      for (let key in releases) {
+        formattedReleases[key] = {};
+        releases[key].forEach((id) => {
+          if (hasKey && img.contentId === id) {
+            formattedReleases[key][id] = img;
+          }
+        });
+      }
     });
+    console.log(formattedReleases)
+    return formattedReleases;
   }
 
   Promise.all(fetchImages(releaseIds))
   .then(formatReleases)
+  .then(releases => res.json({ releases }));
 };
 
 module.exports = getReleaseImages;
