@@ -23,17 +23,16 @@ const searchArtists = (req, res, next) => {
         let fetchedImages = imgs[i].images;
         let images = fetchedImages.map(img => img.url);
         images = images.length < 1 ? ['/images/napster_logo.png'] : images;
-        const artist = {};
-        artist[entry.id] = {
+        return {
           images,
+          id: entry.id,
           name: entry.name,
           releases: {
-            albums: entry.main,
-            compilations: entry.compilations,
-            singlesAndEPs: entry.singlesAndEPs
+            main: entry.albumGroups.main,
+            compilations: entry.albumGroups.compilations,
+            singlesAndEPs: entry.albumGroups.singlesAndEPs
           }
         };
-        return artist;
       });
     });
   }

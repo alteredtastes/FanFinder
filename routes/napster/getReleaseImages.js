@@ -4,13 +4,13 @@ const getReleaseImages = (req, res, next) => {
   const token = req.user.napsterToken;
   const releases = req.body;
   const formattedReleases = {};
-  const releaseIds = releases.albums
+  const releaseIds = releases.main
     .concat(releases.compilations)
     .concat(releases.singlesAndEPs);
 
   const fetchImages = (releaseIds) => {
-    return releaseIds.map(releaseId => {
-      const params = { releaseId };
+    return releaseIds.map(id => {
+      const params = { id };
       const queries = {};
 
       return fetch(request('albumImages', params, queries, token, 'GET'))
@@ -20,19 +20,18 @@ const getReleaseImages = (req, res, next) => {
   }
 
   const formatReleases = (imageResponses) => {
-    imageResponses.forEach(({ releaseImages }) => {
-      let img = releaseImages[0];
+    imageResponses.forEach(({ images }) => {
+      let img = images[0];
       let hasKey = img.hasOwnProperty('contentId');
       for (let key in releases) {
-        formattedReleases[key] = {};
+        if (!formattedReleases[key]) formattedReleases[key] = [];
         releases[key].forEach((id) => {
           if (hasKey && img.contentId === id) {
-            formattedReleases[key][id] = img;
+            formattedReleases[key].push({ id, images });
           }
         });
       }
     });
-    console.log(formattedReleases)
     return formattedReleases;
   }
 

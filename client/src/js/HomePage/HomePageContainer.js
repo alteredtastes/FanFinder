@@ -33,13 +33,11 @@ class HomePageContainer extends Component {
 
   formArtistElements = ({ artists }) => {
     return artists.map(artist => {
-      const artistId = Object.keys(artist)[0];
-      console.log(artistId)
       return (
-        <div key={artistId} name={artistId} onClick={this.getAlbumsByArtist}>
+        <div key={artist.id} name={artist.id} onClick={this.getAlbumsByArtist}>
           <div className="artistImage">
-            <Image src={artists[artistId].images[0]} />
-            <h5 className="artistName">{artists[artistId].name.toUpperCase()}</h5>
+            <Image src={artist.images[0]} />
+            <h5 className="artistName">{artist.name.toUpperCase()}</h5>
           </div>
         </div>
       );
@@ -48,40 +46,45 @@ class HomePageContainer extends Component {
 
   getAlbumsByArtist = (e) => {
     const id = e.currentTarget.getAttribute('name');
-    const body = this.state.artists[id].releases;
-    const options = { credentials: 'include', method: 'POST', body };
+    const releases = this.state.artists
+      .map(artist => artist.id === id ? artist.releases : null)
+      .filter(r => !!r)[0];
+    const body = JSON.stringify(releases);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = { credentials: 'include', method: 'POST', headers, body };
 
     fetch(`/api/napster/get_release_images?artistId=${id}`, options)
-    .then(resp => resp.json())
-    .then(({releases}) => {
-      console.log(releases);
-    });
-
-
-    // fetch(`/api/napster/get_albums_by_artist?artistId=${id}`, { credentials: 'include' })
-    // .then(albResp => ({ albResp, id }))
-    // .then(this.formAlbumElements)
-    // .then(albumElements => {
-    //   this.setState({ albumElements });
-    // });
+    .then(resp => ({ resp: resp.json(), id }))
+    .then(this.storeReleases)
+    .then(this.formAlbumElements)
+    .then(albumElements => {
+      this.setState({ albumElements });
+    })
   }
 
-  // formAlbumElements = ({ albResp, id }) => {
-  //   albResp.json()
-  //   .then(({ albums }) => {
-  //     console.log(albums);
-      // return albums.map(album => {
-      //   return (
-      //     <div key={album.id} name={album.id} /*onClick={this.getListenersByAlbum}*/>
-      //     <div className="albumImage">
-      //       <Image src={album.images[0]} />
-      //       <h5 className="albumName">{album.name.toUpperCase()}</h5>
-      //     </div>
-      //   </div>
-      //   );
-      // });
-    // });
-  // }
+  storeReleases = ({ resp, id }) => {
+    return resp.then(({ releases }) => {
+      this.state.artists.forEach(artist => {
+        if (artist.id === id) {
+          artist.releases = releases
+        };
+      });
+      return { id, releases };
+    })
+  }
+
+  formAlbumElements = ({ id, releases }) => {
+    return releases.main.map(album => {
+      return (
+        <div key={album.id} name={album.id} /*onClick={this.getListenersByAlbum}*/>
+        <div className="albumImage">
+          <Image src={album.images[0].url} />
+          {/* <h5 className="albumName">{album.name.toUpperCase()}</h5> */}
+        </div>
+      </div>
+      );
+    });
+  }
 
   render() {
     return(
