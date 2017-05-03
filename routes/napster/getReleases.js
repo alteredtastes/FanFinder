@@ -1,6 +1,6 @@
 const request = require('../req_util');
 
-const getReleaseImages = (req, res, next) => {
+const getReleases = (req, res, next) => {
   const token = req.user.napsterToken;
   const releases = req.body;
   const formattedReleases = {};
@@ -9,14 +9,29 @@ const getReleaseImages = (req, res, next) => {
     .concat(releases.singlesAndEPs);
 
   const fetchImages = (releaseIds) => {
-    return releaseIds.map(id => {
-      const params = { id };
-      const queries = {};
+    const promises = Promise.all(releaseIds.map(id => {
+        const params = { id };
+        const queries = {};
 
-      return fetch(request('albumImages', params, queries, token, 'GET'))
-        .then(resp => resp.json())
-        .then(res => res);
-    });
+        return fetch(request('albumImages', params, queries, token, 'GET'))
+          .then(resp => resp.json())
+          .then(res => res)
+      }));
+    return { promises, releaseIds }
+  }
+
+  const fetchReleasesMetadata = ({ promises, releaseIds }) => {
+    promises.then(imageResponses => {
+      console.log('got here')
+    })
+    // return releaseIds.map(id => {
+    //   const params = { id };
+    //   const queries = {};
+    //
+    //   return fetch(request('artistReleases', params, queries, token, 'GET'))
+    //     .then(resp => resp.json())
+    //     .then(res => res);
+    // });
   }
 
   const formatReleases = (imageResponses) => {
@@ -36,8 +51,9 @@ const getReleaseImages = (req, res, next) => {
   }
 
   Promise.all(fetchImages(releaseIds))
+  .then(fetchReleasesMetadata)
   .then(formatReleases)
   .then(releases => res.json({ releases }));
 };
 
-module.exports = getReleaseImages;
+module.exports = getReleases;

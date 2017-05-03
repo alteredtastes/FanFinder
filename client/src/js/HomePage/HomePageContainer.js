@@ -8,7 +8,7 @@ class HomePageContainer extends Component {
     super();
     this.state = {
       submitSearch: this.submitSearch.bind(this),
-      getAlbumsByArtist: this.getAlbumsByArtist.bind(this)
+      getReleasesByArtist: this.getReleasesByArtist.bind(this)
     }
   }
 
@@ -34,7 +34,7 @@ class HomePageContainer extends Component {
   formArtistElements = ({ artists }) => {
     return artists.map(artist => {
       return (
-        <div key={artist.id} name={artist.id} onClick={this.getAlbumsByArtist}>
+        <div key={artist.id} name={artist.id} onClick={this.getReleasesByArtist}>
           <div className="artistImage">
             <Image src={artist.images[0]} />
             <h5 className="artistName">{artist.name.toUpperCase()}</h5>
@@ -44,7 +44,7 @@ class HomePageContainer extends Component {
     });
   }
 
-  getAlbumsByArtist = (e) => {
+  getReleasesByArtist = (e) => {
     const id = e.currentTarget.getAttribute('name');
     const releases = this.state.artists
       .map(artist => artist.id === id ? artist.releases : null)
@@ -53,7 +53,7 @@ class HomePageContainer extends Component {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = { credentials: 'include', method: 'POST', headers, body };
 
-    fetch(`/api/napster/get_release_images?artistId=${id}`, options)
+    fetch(`/api/napster/get_releases?artistId=${id}`, options)
     .then(resp => ({ resp: resp.json(), id }))
     .then(this.storeReleases)
     .then(this.formAlbumElements)

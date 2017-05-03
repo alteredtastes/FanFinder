@@ -9,6 +9,6 @@ router.get('/oauth/callback', oauth.napster.callback);
 
 router.get('/napster/search_artists', verifyToken, napster.searchArtists);
 // router.get('/napster/get_albums_by_artist', verifyToken, napster.getAlbumsByArtist);
-router.post('/napster/get_release_images', verifyToken, napster.getReleaseImages);
+router.post('/napster/get_releases', verifyToken, napster.getReleases);
 
 module.exports = router;
