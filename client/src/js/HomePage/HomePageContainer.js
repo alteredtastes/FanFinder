@@ -59,7 +59,7 @@ class HomePageContainer extends Component {
     .then(this.formAlbumElements)
     .then(albumElements => {
       this.setState({ albumElements });
-    })
+    });
   }
 
   storeReleases = ({ resp, id }) => {
