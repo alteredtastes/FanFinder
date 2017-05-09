@@ -8,30 +8,38 @@ const getReleases = (req, res, next) => {
   const getReleaseImages = (id) => {
     return fetch(request('releaseImages', { id }, {}, token, 'GET'))
       .then(resp => resp.json())
-      .then(res => res)
   };
 
   const getReleaseMetadata = (id) => {
     return fetch(request('releaseMetadata', { id }, {}, token, 'GET'))
       .then(resp => resp.json())
-      .then(res => res)
   };
 
   const fetchReleasesImages = (releases) => {
-    return () => {
-      const imagePromises = {};
-      for (let key in releases) {
-        imagePromises[key] = Promise.all(releases[key].map(id => {
-          return getReleaseImages(id);
-        }));
-      };
+    const promises = {};
+    const imagePromises = {};
+    const images = {};
 
-      return { releases, imagePromises };
+    for (let key in releases) {
+      promises[key] = releases[key].map(id => {
+        return getReleaseImages(id);
+      });
     }
-  }
 
-  const fetchReleasesMetadata = ({ releases, imagePromises }) => {
-    imagePromises.main.then(rel => console.log(rel))
+    for (let key in promises) {
+      Promise.all(promises[key])
+        .then(arr => {
+          images[key] = arr;
+        });
+    }
+
+    console.log(images.main);
+
+    return { releases, images };
+  };
+
+  const fetchReleasesMetadata = ({ releases, images }) => {
+    images.main.then(arr => console.log(arr[0]))
     const metadataPromises = {};
     for (let key in releases) {
       metadataPromises[key] = Promise.all(releases[key].map(id => {
@@ -55,7 +63,7 @@ const getReleases = (req, res, next) => {
   }
 
 
-  new Promise(fetchReleasesImages(releases))
+  fetchReleasesImages(releases)
   .then(fetchReleasesMetadata)
   .then(formatResponse)
   .then(releases => res.json({ releases }));
