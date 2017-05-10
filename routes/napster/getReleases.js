@@ -8,65 +8,65 @@ const getReleases = (req, res, next) => {
   const getReleaseImages = (id) => {
     return fetch(request('releaseImages', { id }, {}, token, 'GET'))
       .then(resp => resp.json())
+      .then(res => res);
   };
 
   const getReleaseMetadata = (id) => {
     return fetch(request('releaseMetadata', { id }, {}, token, 'GET'))
       .then(resp => resp.json())
+      .then(res => res);
   };
 
   const fetchReleasesImages = (releases) => {
-    const promises = {};
-    const imagePromises = {};
-    const images = {};
+    return new Promise((resolve) => {
+      const imagePromises = {};
 
-    for (let key in releases) {
-      promises[key] = releases[key].map(id => {
-        return getReleaseImages(id);
-      });
-    }
-
-    for (let key in promises) {
-      Promise.all(promises[key])
-        .then(arr => {
-          images[key] = arr;
+      for (let key in releases) {
+        let promises = releases[key].map(id => {
+          return getReleaseImages(id);
         });
-    }
+        imagePromises[key] = Promise.all(promises);
+      }
 
-    console.log(images.main);
-
-    return { releases, images };
+      resolve({ releases, imagePromises });
+    });
   };
 
-  const fetchReleasesMetadata = ({ releases, images }) => {
-    images.main.then(arr => console.log(arr[0]))
+  const fetchReleasesMetadata = ({ releases, imagePromises }) => {
     const metadataPromises = {};
+
     for (let key in releases) {
-      metadataPromises[key] = Promise.all(releases[key].map(id => {
+      let promises = releases[key].map(id => {
         return getReleaseMetadata(id);
-      }));
+      });
+      metadataPromises[key] = Promise.all(promises);
     }
 
     return { releases, imagePromises, metadataPromises };
   }
 
   const formatResponse = ({ releases, imagePromises, metadataPromises }) => {
+    const formattedResponse = {};
+
     for (let key in releases) {
-      imagePromises[key].then(imagesPerRelease => {
-        metadataPromises[key].then(metadataPerRelease => {
-          console.log(imagesPerRelease)
+      imagePromises[key].then(imagesForRelease => {
+        metadataPromises[key].then(releaseMetadata => {
+
+          console.log(imagesForRelease[0])
+          console.log(releaseMetadata[0])
+          
         });
       });
     }
 
-    return releases;
+    return formattedReleases;
   }
 
 
   fetchReleasesImages(releases)
   .then(fetchReleasesMetadata)
   .then(formatResponse)
-  .then(releases => res.json({ releases }));
+  .then(formattedReleases => res.json({ formattedReleases }));
 };
 
 module.exports = getReleases;
