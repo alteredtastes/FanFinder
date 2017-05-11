@@ -73,7 +73,8 @@ class HomePageContainer extends Component {
     })
   }
 
-  formAlbumElements = ({ id, releases }) => {
+  formAlbumElements = ({/* id, */releases }) => {
+    console.log(releases)
     return releases.main.map(album => {
       return (
         <div key={album.id} name={album.id} /*onClick={this.getListenersByAlbum}*/>

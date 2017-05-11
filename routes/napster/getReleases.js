@@ -46,27 +46,31 @@ const getReleases = (req, res, next) => {
   }
 
   const formatResponse = ({ releases, imagePromises, metadataPromises }) => {
-    const formattedResponse = {};
+    // metadataPromises.compilations.then(b => {
+    //   console.log(b[0]['albums'][0].id)
+    // });
+    // imagePromises.compilations.then((a) => a[0]['images'][0].contentId);
 
+    const async = async () => {
+      
+    }
     for (let key in releases) {
-      imagePromises[key].then(imagesForRelease => {
-        metadataPromises[key].then(releaseMetadata => {
-
-          console.log(imagesForRelease[0])
-          console.log(releaseMetadata[0])
-          
-        });
-      });
+      let images = await imagePromises[key].then(imagesForAlbums => imagesForAlbums[0].images);
+      let metadata = await metadataPromises[key].then(metadataForAlbums => metadataForAlbums[0].albums[0]);
+      let id = metadata.id
+      releases[key].push({ id, images, metadata });
     }
 
-    return formattedReleases;
+    console.log(releases)
+
+    // return releases;
   }
 
 
   fetchReleasesImages(releases)
   .then(fetchReleasesMetadata)
   .then(formatResponse)
-  .then(formattedReleases => res.json({ formattedReleases }));
+  .then(releases => res.json({ releases }));
 };
 
 module.exports = getReleases;
