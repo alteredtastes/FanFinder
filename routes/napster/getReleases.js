@@ -47,10 +47,12 @@ const getReleases = (req, res, next) => {
 
   const formatResponse = ({ releases, imagePromises, metadataPromises }) => {
 
-    async function getAsync(o) {
+    const getAsync = async o => {
       for (let key in releases) {
-        let images = await o.imagePromises[key];
-        let metadata = await o.metadataPromises[key];
+        const [images, metadata] = await Promise.all([
+          o.imagePromises[key],
+          o.metadataPromises[key]
+        ]);
 
         releases[key].forEach((releaseId, i) => {
           releases[key][i] = {
@@ -60,17 +62,16 @@ const getReleases = (req, res, next) => {
           }
         });
       }
-
-      res.json({ releases });
+      return releases;
     };
 
-    getAsync({ imagePromises, metadataPromises });
+    return getAsync({ imagePromises, metadataPromises })
   }
-
 
   fetchReleasesImages(releases)
   .then(fetchReleasesMetadata)
   .then(formatResponse)
+  .then(releases => res.json({ releases }));
 };
 
 module.exports = getReleases;
