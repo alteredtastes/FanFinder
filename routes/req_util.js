@@ -7,10 +7,12 @@ const request = (name, params, queries, token, method) => {
 
   const uri = {
     artistImages: `https://api.napster.com/v2.1/artists/${params.id}/images`,
+    fans: `https://api.napster.com/v2.1/albums/${params.releaseId}/listeners/top`,
     releaseImages: `https://api.napster.com/v2.1/albums/${params.id}/images`,
     releaseMetadata: `https://api.napster.com/v2.1/albums/${params.id}`,
     search: `https://api.napster.com/v2.1/search`
   };
+
 
   return new Request(`${uri[name]}?${qs}`, options);
 };

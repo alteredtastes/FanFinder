@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import './HomePage.css';
 
-const HomePage = ({ submitSearch, artistElements, albumElements }) => (
+const HomePage = ({ submitSearch, artistElements, releaseElements, fanElements }) => (
   <div>
     <Grid>
       <Row>
@@ -16,7 +16,12 @@ const HomePage = ({ submitSearch, artistElements, albumElements }) => (
         </Col>
         <Col xs={2} xsOffset={3} sm={2} smOffset={3} md={2} mdOffset={3}>
           <Row>
-            {albumElements}
+            {releaseElements}
+          </Row>
+        </Col>
+        <Col xs={2} xsOffset={3} sm={2} smOffset={3} md={2} mdOffset={3}>
+          <Row>
+            {fanElements}
           </Row>
         </Col>
       </Row>

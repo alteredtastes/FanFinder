@@ -68,6 +68,7 @@ const getReleases = (req, res, next) => {
     return getAsync({ imagePromises, metadataPromises })
   }
 
+
   fetchReleasesImages(releases)
   .then(fetchReleasesMetadata)
   .then(formatResponse)

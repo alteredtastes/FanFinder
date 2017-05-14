@@ -56,9 +56,9 @@ class HomePageContainer extends Component {
     fetch(`/api/napster/get_releases?artistId=${id}`, options)
     .then(resp => ({ resp: resp.json(), id }))
     .then(this.storeReleases)
-    .then(this.formAlbumElements)
-    .then(albumElements => {
-      this.setState({ albumElements });
+    .then(this.formReleaseElements)
+    .then(releaseElements => {
+      this.setState({ releaseElements });
     });
   }
 
@@ -73,15 +73,46 @@ class HomePageContainer extends Component {
     })
   }
 
-  formAlbumElements = ({/* id, */releases }) => {
+  formReleaseElements = ({ releases }) => {
     return releases.main.map(album => {
       return (
-        <div key={album.id} name={album.id} /*onClick={this.getListenersByAlbum}*/>
-        <div className="albumImage">
-          <Image src={album.images[0].url} />
-          {/* <h5 className="albumName">{album.name.toUpperCase()}</h5> */}
+        <div key={album.id} name={album.id} onClick={this.getFansByRelease}>
+          <div className="albumImage">
+            <Image src={album.images[0].url} />
+            <h5 className="albumName">{album.metadata.name.toUpperCase()}</h5>
+          </div>
         </div>
-      </div>
+      );
+    });
+  }
+
+  getFansByRelease = (e) => {
+    const id = e.currentTarget.getAttribute('name');
+
+    fetch(`/api/napster/get_fans?releaseId=${id}`, { credentials: 'include' })
+    .then(resp => resp.json())
+    .then(this.storeFans)
+    .then(this.formFanElements)
+    .then(fanElements => {
+      this.setState({ fanElements });
+    });
+  }
+
+  storeFans = ({ fans }) => {
+    this.setState({ fans });
+    return { fans };
+  }
+
+  formFanElements = ({ fans }) => {
+    return fans.map(fan => {
+      return (
+        <div key={fan.id} name={fan.id}>
+          <div className="fanImage">
+            <Image src={fan.avatar} />
+            <h5 className="fanName">{fan.screenName.toUpperCase()}</h5>
+            <h5 className="plays">{fan.plays}</h5>
+          </div>
+        </div>
       );
     });
   }
