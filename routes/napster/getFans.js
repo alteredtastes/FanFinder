@@ -13,7 +13,6 @@ const getFans = (req, res, next) => {
     });
     listeners.reverse();
     const fans = listeners;
-    console.log(fans);
     res.json({ fans });
   });
 }

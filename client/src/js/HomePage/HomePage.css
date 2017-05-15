@@ -32,6 +32,14 @@
   font-size: 9px;
 }
 
+.plays {
+  margin-top: -10px;
+  width: 100%;
+  color: white;
+  font-family: Helvetica;
+  font-size: 7px;
+}
+
 img {
   width: 100%;
 }
