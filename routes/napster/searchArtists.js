@@ -18,7 +18,7 @@ const searchArtists = (req, res, next) => {
   }
 
   const formatArtists = ({ data, promises }) => {
-    return promises.then((imgs) => {
+    return promises.then(imgs => {
       return data.map((entry, i) => {
         let fetchedImages = imgs[i].images;
         let images = fetchedImages.map(img => img.url);

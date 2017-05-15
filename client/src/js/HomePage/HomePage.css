@@ -24,6 +24,14 @@
   font-size: 9px;
 }
 
+.fanName {
+  margin-top: -20px;
+  width: 100%;
+  color: white;
+  font-family: Helvetica;
+  font-size: 9px;
+}
+
 img {
   width: 100%;
 }

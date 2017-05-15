@@ -105,11 +105,12 @@ class HomePageContainer extends Component {
 
   formFanElements = ({ fans }) => {
     return fans.map(fan => {
+      const name = fan.realName || fan.screenName;
       return (
         <div key={fan.id} name={fan.id}>
           <div className="fanImage">
             <Image src={fan.avatar} />
-            <h5 className="fanName">{fan.screenName.toUpperCase()}</h5>
+            <h5 className="fanName">{name.toUpperCase()}</h5>
             <h5 className="plays">{fan.plays}</h5>
           </div>
         </div>

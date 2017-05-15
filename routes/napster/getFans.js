@@ -8,7 +8,12 @@ const getFans = (req, res, next) => {
   return fetch(request('fans', params, queries, token, 'GET'))
   .then(resp => resp.json())
   .then(({ listeners }) => {
+    listeners.sort((a, b) => {
+      return a.plays - b.plays;
+    });
+    listeners.reverse();
     const fans = listeners;
+    console.log(fans);
     res.json({ fans });
   });
 }
