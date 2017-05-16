@@ -8,11 +8,6 @@ const createToken = ({ _id }) => {
 };
 
 const verifyToken = (req, res, next) => {
-  // ONLY FOR DEVELOPMENT
-  if (process.env.NODE_ENV === 'kill-auth') {
-    next();
-    return;
-  }
 
   var token = req.signedCookies.token || req.body.token || req.query.token || req.headers['x-access-token'];
   if (!token) {

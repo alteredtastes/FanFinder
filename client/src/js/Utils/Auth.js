@@ -6,12 +6,16 @@ class Auth extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      appState: this.props.location.query.appState
+      appState: this.props.location.query.appState || 'home'
     }
   }
 
   componentWillMount() {
-    if(cookie.load('token')) {
+
+    if(cookie.load('token')) { 
+      /* if server uses httpOnly cookie, this cookie.load will need to check
+      a non-httpOnly cookie. The server will still authorize user via jwt
+      decrypt on the httpOnly cookie.*/
       browserHistory.push(this.state.appState);
     } else {
       console.log('login failed!');
