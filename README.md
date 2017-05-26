@@ -14,12 +14,12 @@ Sample full stack app written with React, Express, Node, and Mongo. Demonstrates
     - Create a `.env` file in the project's root directory, i.e. `/NapRanks/.env`
     - Copy/paste credentials from your Napster developer app page as follows into the `.env` file.
       ```
-         NAPSTER_KEY=YOUR APP'S API KEY FROM DEVELOPER.NAPSTER.COM   
-         NAPSTER_SECRET=YOUR APP'S SECRET FROM DEVELOPER.NAPSTER.COM
-         NAPSTER_CALLBACK=http://localhost:3001/api/oauth/callback
+       NAPSTER_KEY=YOUR APP'S API KEY FROM DEVELOPER.NAPSTER.COM   
+       NAPSTER_SECRET=YOUR APP'S SECRET FROM DEVELOPER.NAPSTER.COM
+       NAPSTER_CALLBACK=http://localhost:3001/api/oauth/callback
          ```
 - Your NapRank App's Credentials:
-    - Add strings for the jwt and cookie secrets and then include the lines in the same `.env` file.  
+    - Add strings for the jwt and cookie secrets below and then include the lines in the same `.env` file.  
         ```
         JWT_SECRET=ANY STRING OF CHARACTERS CAN GO HERE  
         COOKIE_SECRET=ANY STRING OF CHARACTERS CAN GO HERE  
